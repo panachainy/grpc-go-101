@@ -2,7 +2,15 @@
 
 ## Setup
 
-1. Install protoc command `brew install protobuf`
+1. Install protoc command
+
+```sh
+# Protoc
+brew install protobuf
+# Clang-Format for format .proto file on vs-code
+brew install clang-format
+```
+
 ~~2. Install go plugin `go get -u github.com/golang/protobuf/protoc-gen-go`~~
 
 2. Install
@@ -32,3 +40,4 @@ protoc --go_out=. --go_opt=paths=source_relative \
 - https://github.com/varshard/helloproto
 - https://medium.com/@titlebhoomtawathplinsut/%E0%B8%A1%E0%B8%B2%E0%B8%97%E0%B8%B3-grpc-service-%E0%B8%94%E0%B9%89%E0%B8%A7%E0%B8%A2-go-%E0%B8%81%E0%B8%B1%E0%B8%99-866d7452f5dd
 - [gRPC new](https://programmingpercy.tech/blog/using-grpc-tls-go-react-no-reverse-proxy/)
+- [Example gRPC Thai](https://thanwa.medium.com/grpc-%E0%B8%A1%E0%B8%B2%E0%B8%9D%E0%B8%B6%E0%B8%81%E0%B9%80%E0%B8%82%E0%B8%B5%E0%B8%A2%E0%B8%99-grpc-%E0%B8%81%E0%B8%B1%E0%B8%99-hands-on-e4cc325033fb)
