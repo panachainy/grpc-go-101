@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.2.0
 // - protoc             v3.19.4
-// source: pingpong-unary.proto
+// source: cmd/unary/pingpong/pingpong-unary.proto
 
 package pingpong
 
@@ -101,5 +101,5 @@ var PingPong_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "pingpong-unary.proto",
+	Metadata: "cmd/unary/pingpong/pingpong-unary.proto",
 }
