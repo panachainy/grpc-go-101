@@ -3,7 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
-	pb "grpc-go-101/pingpong"
+	pb "grpc-go-101/cmd/unary/pingpong"
 	"net"
 
 	"google.golang.org/grpc"

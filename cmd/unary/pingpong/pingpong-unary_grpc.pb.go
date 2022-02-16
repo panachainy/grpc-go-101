@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.2.0
 // - protoc             v3.19.4
-// source: pingpong.proto
+// source: cmd/unary/pingpong/pingpong-unary.proto
 
 package pingpong
 
@@ -22,7 +22,6 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type PingPongClient interface {
-	// PingPongService has a method, which is StartPing
 	Unary(ctx context.Context, in *Ping, opts ...grpc.CallOption) (*Pong, error)
 }
 
@@ -47,7 +46,6 @@ func (c *pingPongClient) Unary(ctx context.Context, in *Ping, opts ...grpc.CallO
 // All implementations must embed UnimplementedPingPongServer
 // for forward compatibility
 type PingPongServer interface {
-	// PingPongService has a method, which is StartPing
 	Unary(context.Context, *Ping) (*Pong, error)
 	mustEmbedUnimplementedPingPongServer()
 }
@@ -103,5 +101,5 @@ var PingPong_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "pingpong.proto",
+	Metadata: "cmd/unary/pingpong/pingpong-unary.proto",
 }
