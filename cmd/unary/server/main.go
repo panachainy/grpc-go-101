@@ -11,7 +11,7 @@ import (
 
 type PingPongServerImpl struct{ pb.UnimplementedPingPongServer }
 
-func (s *PingPongServerImpl) StartPing(ctx context.Context, ping *pb.Ping) (*pb.Pong, error) {
+func (s *PingPongServerImpl) Unary(ctx context.Context, ping *pb.Ping) (*pb.Pong, error) {
 	fmt.Println("Ping received: ", ping.GetMessage())
 
 	resp := pb.Pong{

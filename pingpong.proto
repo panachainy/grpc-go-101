@@ -19,10 +19,8 @@ message Pong {
 }
 
 service PingPong {
-  // PingPongService has a method, which is StartPing
-  rpc StartPing(Ping) returns (Pong);
+  rpc Unary(Ping) returns (Pong);
 
-  // rpc Unary (Ping) returns (Pong);
   // rpc ClientStream(stream Ping) returns (Pong);
   // rpc ServerStream(Ping) returns (stream Pong);
   // rpc BidirectionalStream(stream Ping) returns (Pong);

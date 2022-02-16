@@ -23,7 +23,7 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type PingPongClient interface {
 	// PingPongService has a method, which is StartPing
-	StartPing(ctx context.Context, in *Ping, opts ...grpc.CallOption) (*Pong, error)
+	Unary(ctx context.Context, in *Ping, opts ...grpc.CallOption) (*Pong, error)
 }
 
 type pingPongClient struct {
@@ -34,9 +34,9 @@ func NewPingPongClient(cc grpc.ClientConnInterface) PingPongClient {
 	return &pingPongClient{cc}
 }
 
-func (c *pingPongClient) StartPing(ctx context.Context, in *Ping, opts ...grpc.CallOption) (*Pong, error) {
+func (c *pingPongClient) Unary(ctx context.Context, in *Ping, opts ...grpc.CallOption) (*Pong, error) {
 	out := new(Pong)
-	err := c.cc.Invoke(ctx, "/pingpong.PingPong/StartPing", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/pingpong.PingPong/Unary", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -48,7 +48,7 @@ func (c *pingPongClient) StartPing(ctx context.Context, in *Ping, opts ...grpc.C
 // for forward compatibility
 type PingPongServer interface {
 	// PingPongService has a method, which is StartPing
-	StartPing(context.Context, *Ping) (*Pong, error)
+	Unary(context.Context, *Ping) (*Pong, error)
 	mustEmbedUnimplementedPingPongServer()
 }
 
@@ -56,8 +56,8 @@ type PingPongServer interface {
 type UnimplementedPingPongServer struct {
 }
 
-func (UnimplementedPingPongServer) StartPing(context.Context, *Ping) (*Pong, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method StartPing not implemented")
+func (UnimplementedPingPongServer) Unary(context.Context, *Ping) (*Pong, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Unary not implemented")
 }
 func (UnimplementedPingPongServer) mustEmbedUnimplementedPingPongServer() {}
 
@@ -72,20 +72,20 @@ func RegisterPingPongServer(s grpc.ServiceRegistrar, srv PingPongServer) {
 	s.RegisterService(&PingPong_ServiceDesc, srv)
 }
 
-func _PingPong_StartPing_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _PingPong_Unary_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(Ping)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(PingPongServer).StartPing(ctx, in)
+		return srv.(PingPongServer).Unary(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/pingpong.PingPong/StartPing",
+		FullMethod: "/pingpong.PingPong/Unary",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(PingPongServer).StartPing(ctx, req.(*Ping))
+		return srv.(PingPongServer).Unary(ctx, req.(*Ping))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -98,8 +98,8 @@ var PingPong_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*PingPongServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "StartPing",
-			Handler:    _PingPong_StartPing_Handler,
+			MethodName: "Unary",
+			Handler:    _PingPong_Unary_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
