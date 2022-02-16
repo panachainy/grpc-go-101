@@ -22,8 +22,8 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type PingPongClient interface {
-	// PingPongService has a method, which is StartPing
 	Unary(ctx context.Context, in *Ping, opts ...grpc.CallOption) (*Pong, error)
+	ClientStream(ctx context.Context, opts ...grpc.CallOption) (PingPong_ClientStreamClient, error)
 }
 
 type pingPongClient struct {
@@ -43,12 +43,46 @@ func (c *pingPongClient) Unary(ctx context.Context, in *Ping, opts ...grpc.CallO
 	return out, nil
 }
 
+func (c *pingPongClient) ClientStream(ctx context.Context, opts ...grpc.CallOption) (PingPong_ClientStreamClient, error) {
+	stream, err := c.cc.NewStream(ctx, &PingPong_ServiceDesc.Streams[0], "/pingpong.PingPong/ClientStream", opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &pingPongClientStreamClient{stream}
+	return x, nil
+}
+
+type PingPong_ClientStreamClient interface {
+	Send(*Ping) error
+	CloseAndRecv() (*Pong, error)
+	grpc.ClientStream
+}
+
+type pingPongClientStreamClient struct {
+	grpc.ClientStream
+}
+
+func (x *pingPongClientStreamClient) Send(m *Ping) error {
+	return x.ClientStream.SendMsg(m)
+}
+
+func (x *pingPongClientStreamClient) CloseAndRecv() (*Pong, error) {
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	m := new(Pong)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
 // PingPongServer is the server API for PingPong service.
 // All implementations must embed UnimplementedPingPongServer
 // for forward compatibility
 type PingPongServer interface {
-	// PingPongService has a method, which is StartPing
 	Unary(context.Context, *Ping) (*Pong, error)
+	ClientStream(PingPong_ClientStreamServer) error
 	mustEmbedUnimplementedPingPongServer()
 }
 
@@ -58,6 +92,9 @@ type UnimplementedPingPongServer struct {
 
 func (UnimplementedPingPongServer) Unary(context.Context, *Ping) (*Pong, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Unary not implemented")
+}
+func (UnimplementedPingPongServer) ClientStream(PingPong_ClientStreamServer) error {
+	return status.Errorf(codes.Unimplemented, "method ClientStream not implemented")
 }
 func (UnimplementedPingPongServer) mustEmbedUnimplementedPingPongServer() {}
 
@@ -90,6 +127,32 @@ func _PingPong_Unary_Handler(srv interface{}, ctx context.Context, dec func(inte
 	return interceptor(ctx, in, info, handler)
 }
 
+func _PingPong_ClientStream_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(PingPongServer).ClientStream(&pingPongClientStreamServer{stream})
+}
+
+type PingPong_ClientStreamServer interface {
+	SendAndClose(*Pong) error
+	Recv() (*Ping, error)
+	grpc.ServerStream
+}
+
+type pingPongClientStreamServer struct {
+	grpc.ServerStream
+}
+
+func (x *pingPongClientStreamServer) SendAndClose(m *Pong) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+func (x *pingPongClientStreamServer) Recv() (*Ping, error) {
+	m := new(Ping)
+	if err := x.ServerStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
 // PingPong_ServiceDesc is the grpc.ServiceDesc for PingPong service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -102,6 +165,12 @@ var PingPong_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _PingPong_Unary_Handler,
 		},
 	},
-	Streams:  []grpc.StreamDesc{},
+	Streams: []grpc.StreamDesc{
+		{
+			StreamName:    "ClientStream",
+			Handler:       _PingPong_ClientStream_Handler,
+			ClientStreams: true,
+		},
+	},
 	Metadata: "pingpong.proto",
 }
