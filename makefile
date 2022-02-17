@@ -13,3 +13,5 @@ unary.client:
 
 clientstream.server:
 	go run ./cmd/clientstream/server/
+clientstream.client:
+	go run ./cmd/clientstream/client/
