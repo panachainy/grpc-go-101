@@ -22,5 +22,5 @@ service PingPong {
   rpc Unary(Ping) returns (Pong);
   rpc ClientStream(stream Ping) returns (Pong);
   rpc ServerStream(Ping) returns (stream Pong);
-  rpc BidirectionalStream(stream Ping) returns (Pong);
+  rpc BidirectionalStream(stream Ping) returns (stream Pong);
 }
