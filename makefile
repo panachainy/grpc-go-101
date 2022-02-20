@@ -15,3 +15,8 @@ clientstream.server:
 	go run ./cmd/clientstream/server/
 clientstream.client:
 	go run ./cmd/clientstream/client/
+
+serverstream.server:
+	go run ./cmd/serverstream/server/
+serverstream.client:
+	go run ./cmd/serverstream/client/

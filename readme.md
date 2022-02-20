@@ -24,15 +24,8 @@ go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.1
 
 ## Compile proto file
 
-1. Write your proto
-~~2. compile proto file `protoc --go_out=. *.proto`~~
-
-2. Compile proto file
-
 ```sh
-protoc --go_out=. --go_opt=paths=source_relative \
-    --go-grpc_out=. --go-grpc_opt=paths=source_relative \
-    pingpong.proto
+make gen.proto path=./pingpong-all.proto
 ```
 
 ## Ref
