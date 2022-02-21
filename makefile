@@ -20,3 +20,8 @@ serverstream.server:
 	go run ./cmd/serverstream/server/
 serverstream.client:
 	go run ./cmd/serverstream/client/
+
+bidistream.client:
+	go run ./cmd/bidistream/client/
+bidistream.server:
+	go run ./cmd/bidistream/server/
