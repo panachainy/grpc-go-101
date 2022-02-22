@@ -18,9 +18,4 @@ message Pong {
   string message = 2;
 }
 
-service PingPong {
-  rpc Unary(Ping) returns (Pong);
-  rpc ClientStream(stream Ping) returns (Pong);
-  rpc ServerStream(Ping) returns (stream Pong);
-  rpc BidirectionalStream(stream Ping) returns (stream Pong);
-}
+service PingPong { rpc BidirectionalStream(stream Ping) returns (stream Pong); }

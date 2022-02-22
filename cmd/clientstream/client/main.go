@@ -11,10 +11,10 @@ import (
 
 func SentPing(client pb.PingPongClient) {
 	pings := []*pb.Ping{
-		&pb.Ping{Message: "ping1"},
-		&pb.Ping{Message: "ping2"},
-		&pb.Ping{Message: "ping3"},
-		&pb.Ping{Message: "ping4"},
+		{Message: "ping1"},
+		{Message: "ping2"},
+		{Message: "ping3"},
+		{Message: "ping4"},
 	}
 
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
