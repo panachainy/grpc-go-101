@@ -14,7 +14,7 @@ type PingPongServer struct {
 	pb.UnimplementedPingPongServer
 }
 
-func (s *PingPongServer) ServerStream(stream pb.PingPong_BidirectionalStreamServer) error {
+func (s *PingPongServer) BidirectionalStream(stream pb.PingPong_BidirectionalStreamServer) error {
 	fmt.Println("in coming...")
 
 	allReqMessage := ""
@@ -47,6 +47,7 @@ func StartPingPongServer() {
 	}
 
 	grpcServer := grpc.NewServer()
+
 	pb.RegisterPingPongServer(grpcServer, &server)
 
 	fmt.Println("starting server")
